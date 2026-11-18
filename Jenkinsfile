@@ -28,6 +28,21 @@ pipeline {
                 '''
             }
         }
+        stage('Push to Docker Hub') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            sh '''
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker tag student-ml-midterm:${BUILD_NUMBER} abdulsubhan480/ml-retraining-midterm:latest
+                docker push abdulsubhan480/ml-retraining-midterm:latest
+            '''
+        }
+    }
+}
 
         stage('Test Candidate') {
             steps {
