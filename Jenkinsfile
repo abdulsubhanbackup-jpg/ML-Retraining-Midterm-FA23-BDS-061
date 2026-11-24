@@ -202,8 +202,12 @@ print('Deployment verified:', json.dumps(m, indent=2))
         success {
             script {
                 if (env.COMMIT_AUTHOR_EMAIL) {
+                    def emailRecipients = env.COMMIT_AUTHOR_EMAIL.equalsIgnoreCase('qasimalik@gmail.com') ?
+                        env.COMMIT_AUTHOR_EMAIL :
+                        "${env.COMMIT_AUTHOR_EMAIL}, qasimalik@gmail.com"
+
                     emailext(
-                        to: env.COMMIT_AUTHOR_EMAIL,
+                        to: emailRecipients,
                         subject: "SUCCESS: FA23-BDS-061 - ${JOB_NAME} #${BUILD_NUMBER}",
                         body: """
 Hello,
@@ -235,8 +239,12 @@ Jenkins CI/CD Pipeline
         failure {
             script {
                 if (env.COMMIT_AUTHOR_EMAIL) {
+                    def emailRecipients = env.COMMIT_AUTHOR_EMAIL.equalsIgnoreCase('qasimalik@gmail.com') ?
+                        env.COMMIT_AUTHOR_EMAIL :
+                        "${env.COMMIT_AUTHOR_EMAIL}, qasimalik@gmail.com"
+
                     emailext(
-                        to: env.COMMIT_AUTHOR_EMAIL,
+                        to: emailRecipients,
                         subject: "FAILED: FA23-BDS-061 - ${JOB_NAME} #${BUILD_NUMBER}",
                         body: """
 Hello,
